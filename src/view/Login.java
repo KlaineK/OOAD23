@@ -65,7 +65,7 @@ public class Login extends BorderPane {
 			}
 			else {
 				UserController userController = new UserController();
-				String res = userController.login(emailField.getText(), passField.getText(), primaryStage, main);
+				String res = userController.authenticate(emailField.getText(), passField.getText(), primaryStage, main);
 				warning.setText(res);
 			}
 		});

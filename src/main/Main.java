@@ -18,7 +18,6 @@ public class Main extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		// TODO Auto-generated method stub
 		primaryStage.setScene(new Scene(new Register(primaryStage, this), 1200, 700));
-//		primaryStage.setScene(new Scene(new AdminPage(primaryStage), 1200, 700));
 		primaryStage.show();
 	}
 

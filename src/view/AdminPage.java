@@ -2,7 +2,8 @@ package view;
 
 import java.util.ArrayList;
 
-import controller.AdminController;
+import controller.MenuItemController;
+import controller.UserController;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -34,7 +35,8 @@ import main.Main;
 import model.User;
 
 public class AdminPage extends BorderPane {
-	AdminController adminController = new AdminController();
+	MenuItemController menuItemController = new MenuItemController();
+	UserController userController = new UserController();
 	
 	Menu menu;
 	MenuBar mb;
@@ -67,7 +69,7 @@ public class AdminPage extends BorderPane {
                     {
                         btn.setOnAction((ActionEvent event) -> {
                             User user = getTableView().getItems().get(getIndex());
-                            String res = adminController.deleteUser(user.getId());
+                            String res = userController.deleteUser(user.getId());
                             System.out.println(res);
                             
                             manageUser();
@@ -107,9 +109,8 @@ public class AdminPage extends BorderPane {
                     {
                         btn.setOnAction((ActionEvent event) -> {
                             model.MenuItem item = getTableView().getItems().get(getIndex());
-//                            String res = adminController.deleteUser(item.getId());
-//                            System.out.println(res);
-                            System.out.println("hehe");
+                            String res = menuItemController.deleteMenuItem(item.getItemId());
+                            System.out.println(res);
                             
                             manageMenu();
                         });
@@ -274,7 +275,7 @@ public class AdminPage extends BorderPane {
 		
 		sp.setContent(table);
 		
-		ArrayList<User> res = adminController.getUserList();
+		ArrayList<User> res = userController.getAllUser();
 		
 		table.getItems().clear();
 		for (User u : res) {
@@ -290,7 +291,7 @@ public class AdminPage extends BorderPane {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-					String status = adminController.editRole(roleComboBox.getValue(), user.getId());
+					String status = userController.updateUser(roleComboBox.getValue(), user.getId());
 					System.out.println(status);
 					manageUser();
 				}
@@ -348,7 +349,7 @@ public class AdminPage extends BorderPane {
 		descField.setText("");
 		priceField.setText("");
 		
-		ArrayList<model.MenuItem> menus = adminController.getMenuItemList();
+		ArrayList<model.MenuItem> menus = menuItemController.getAllMenuItem();
 		
 		itemTable.getItems().clear();
 		for (model.MenuItem m : menus) {
@@ -360,7 +361,7 @@ public class AdminPage extends BorderPane {
 			@Override
 			public void handle(ActionEvent event) {
 				// TODO Auto-generated method stub
-				String status = adminController.createMenuItem(nameField.getText(), descField.getText(), priceField.getText());
+				String status = menuItemController.createMenuItem(nameField.getText(), descField.getText(), priceField.getText());
 				System.out.println(status);
 
 				manageMenu();
@@ -379,7 +380,7 @@ public class AdminPage extends BorderPane {
 				@Override
 				public void handle(ActionEvent event) {
 					// TODO Auto-generated method stub
-					String status = adminController.updateMenuItem(item.getItemId(), 
+					String status = menuItemController.updateMenuItem(item.getItemId(), 
 							updateNameField.getText(), updateDescField.getText(), updatePriceField.getText());
 					System.out.println(status);
 

@@ -6,41 +6,13 @@ import java.util.ArrayList;
 
 import database.Connect;
 import model.MenuItem;
-import model.User;
 
-public class AdminController {
+public class MenuItemController {
 	Connect db = Connect.getInstance();
 	
-	public ArrayList<User> getUserList() {
-		String query = String.format("SELECT * FROM `users`");
-		ResultSet res = db.selectData(query);
-		
-		ArrayList<User> users = new ArrayList<>();
-
-		try {
-			while(res.next()) {
-				User u = new User(Integer.toString(res.getInt("userId")), res.getString("userName"), res.getString("userEmail"), res.getString("userPassword"), res.getString("userRole"));
-				users.add(u);
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return users;
-	}
-	
-	public String editRole(String role, String userId) {
-		String query = String.format("UPDATE `users` SET `userRole` = '%s' 	WHERE `userId` = '%d'", role, Integer.parseInt(userId));
-		Boolean res = db.execute(query);
-		if(!res) {
-			return "Failed";
-		}
-		return "Success";
-	}
-	
-	public ArrayList<MenuItem> getMenuItemList() {
+	public ArrayList<MenuItem> getAllMenuItem() {
 		String query = String.format("SELECT * FROM `menuitems`");
-		
+
 		ResultSet res = db.selectData(query);
 		ArrayList<MenuItem> items = new ArrayList<>();
 		
@@ -57,16 +29,6 @@ public class AdminController {
 		}
 		
 		return items;
-	}
-	
-	public String deleteUser(String userId) {
-		String query = String.format("DELETE FROM `users` WHERE `userId` = '%d'", Integer.parseInt(userId));
-		Boolean res = db.execute(query);
-		if(!res) {
-			return "Failed";
-		}
-		
-		return "Success";
 	}
 	
 	public String createMenuItem(String name, String desc, String price) {
@@ -97,5 +59,14 @@ public class AdminController {
 		}
 		
 		return "Update success";
+	}
+	
+	public String deleteMenuItem(String id) {
+		String query = String.format("DELETE FROM `menuitems` WHERE `menuItemId` = '%d'", Integer.parseInt(id));
+		
+		if(!db.execute(query)) {
+			return "Delete failed";
+		}
+		return "Delete success";
 	}
 }

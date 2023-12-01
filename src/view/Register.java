@@ -76,7 +76,7 @@ public class Register extends BorderPane {
 			}
 			else {
 				UserController userController = new UserController();
-				String res = userController.registerUser(unameField.getText(), emailField.getText(), passField.getText(), confirmPassField.getText(), primaryStage, main);
+				String res = userController.creteUser(unameField.getText(), emailField.getText(), passField.getText(), confirmPassField.getText(), primaryStage, main);
 				warning.setText(res);
 			}
 		});

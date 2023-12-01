@@ -3,6 +3,7 @@ package controller;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import database.Connect;
 import javafx.scene.Scene;
@@ -19,7 +20,7 @@ import view.WaiterPage;
 public class UserController {
 	Connect db = Connect.getInstance();
 	
-	public String registerUser(String username, String email, String password, String confirmPassword, Stage primaryStage, Main main) {
+	public String creteUser(String username, String email, String password, String confirmPassword, Stage primaryStage, Main main) {
 		if(password.length() < 6) {
 			return "Password must be at least 6 characters";
 		}
@@ -37,7 +38,45 @@ public class UserController {
 		return "Success";
 	}
 	
-	public String login(String email, String password, Stage primaryStage, Main main) {
+	public String deleteUser(String userId) {
+		String query = String.format("DELETE FROM `users` WHERE `userId` = '%d'", Integer.parseInt(userId));
+
+		if(!db.execute(query)) {
+			return "Failed";
+		}
+		
+		return "Success";
+	}
+	
+	public ArrayList<User> getAllUser() {
+		String query = String.format("SELECT * FROM `users`");
+		ResultSet res = db.selectData(query);
+		
+		ArrayList<User> users = new ArrayList<>();
+
+		try {
+			while(res.next()) {
+				User u = new User(Integer.toString(res.getInt("userId")), res.getString("userName"), res.getString("userEmail"), res.getString("userPassword"), res.getString("userRole"));
+				users.add(u);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return users;
+	}
+	
+	public String updateUser(String role, String userId) {
+		String query = String.format("UPDATE `users` SET `userRole` = '%s' 	WHERE `userId` = '%d'", role, Integer.parseInt(userId));
+		
+		if(!db.execute(query)) {
+			return "Failed";
+		}
+		return "Success";
+	}
+	
+	
+	public String authenticate(String email, String password, Stage primaryStage, Main main) {
 		String query = String.format("SELECT * FROM `users` WHERE `userEmail` = ? AND `userPassword` = ?");
 		PreparedStatement ps = db.prepStatement(query);
 		

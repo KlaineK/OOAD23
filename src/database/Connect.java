@@ -2,6 +2,7 @@ package database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -58,6 +59,19 @@ public class Connect {
 		}
 		
 		return true;
+	}
+	
+	public PreparedStatement prepStatement(String query) {
+		PreparedStatement ps = null;
+		
+		try {
+			ps = con.prepareStatement(query);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return ps;
 	}
 	
 }

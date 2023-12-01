@@ -6,4 +6,5 @@ module finalProject {
 	opens main;
 	opens view;
 	opens controller;
+	opens model;
 }

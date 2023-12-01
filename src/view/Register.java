@@ -15,9 +15,10 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import main.Main;
 
 public class Register extends BorderPane {
-	public Register (Stage primaryStage) {
+	public Register (Stage primaryStage, Main main) {
 		VBox container = new VBox();
 		GridPane gp = new GridPane();
 		
@@ -63,9 +64,10 @@ public class Register extends BorderPane {
 		VBox.setMargin(warning, new Insets(5, 0, 5, 0));
 		container.setAlignment(Pos.CENTER);
 		login.setUnderline(true);
+		regisBtn.setPrefWidth(80);
 		
 		login.setOnMouseClicked(e -> {
-			primaryStage.setScene(new Scene(new Login(primaryStage), 1200, 700));
+			primaryStage.setScene(new Scene(new Login(primaryStage, main), 1200, 700));
 		});
 		
 		regisBtn.setOnMouseClicked(e -> {
@@ -74,7 +76,7 @@ public class Register extends BorderPane {
 			}
 			else {
 				UserController userController = new UserController();
-				String res = userController.registerUser(unameField.getText(), emailField.getText(), passField.getText(), confirmPassField.getText(), primaryStage);
+				String res = userController.registerUser(unameField.getText(), emailField.getText(), passField.getText(), confirmPassField.getText(), primaryStage, main);
 				warning.setText(res);
 			}
 		});

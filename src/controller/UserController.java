@@ -1,11 +1,13 @@
 package controller;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import database.Connect;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import main.Main;
 import model.User;
 import view.AdminPage;
 import view.CashierPage;
@@ -17,7 +19,7 @@ import view.WaiterPage;
 public class UserController {
 	Connect db = Connect.getInstance();
 	
-	public String registerUser(String username, String email, String password, String confirmPassword, Stage primaryStage) {
+	public String registerUser(String username, String email, String password, String confirmPassword, Stage primaryStage, Main main) {
 		if(password.length() < 6) {
 			return "Password must be at least 6 characters";
 		}
@@ -31,35 +33,37 @@ public class UserController {
 			return "Email already exist";
 		}
 		
-		primaryStage.setScene(new Scene(new Login(primaryStage), 1200, 700));
+		primaryStage.setScene(new Scene(new Login(primaryStage, main), 1200, 700));
 		return "Success";
 	}
 	
-	public String login(String username, String password, Stage primaryStage) {
-		String query = String.format("SELECT * FROM `users` WHERE `userEmail` = '%s' AND `userPassword` = '%s'", username, password);
-		ResultSet rs = db.selectData(query);
+	public String login(String email, String password, Stage primaryStage, Main main) {
+		String query = String.format("SELECT * FROM `users` WHERE `userEmail` = ? AND `userPassword` = ?");
+		PreparedStatement ps = db.prepStatement(query);
+		
 		try {
+			ps.setString(1, email);
+			ps.setString(2, password);
+			ResultSet rs = ps.executeQuery();
 			if(rs.next()) {
-				System.out.println(rs.getString("userEmail"));
-				System.out.println(rs.getString("userPassword"));
-				User user = new User(rs.getString("userName"), rs.getString("userEmail"), rs.getString("userPassword"), rs.getString("userRole"));
+				User user = new User(Integer.toString(rs.getInt("userId")), rs.getString("userName"), rs.getString("userEmail"), rs.getString("userPassword"), rs.getString("userRole"));
 				System.out.println(user.getUsername());
 				System.out.println(user.getPassword());
 				
 				if(user.getRole().equals("Customer")) {
-					primaryStage.setScene(new Scene(new CustomerPage(primaryStage), 1200, 700));					
+					primaryStage.setScene(new Scene(new CustomerPage(primaryStage, main), 1200, 700));					
 				}
 				else if(user.getRole().equals("Admin")) {
-					primaryStage.setScene(new Scene(new AdminPage(primaryStage), 1200, 700));
+					primaryStage.setScene(new Scene(new AdminPage(primaryStage, main), 1200, 700));
 				}
 				else if(user.getRole().equals("Chef")) {
-					primaryStage.setScene(new Scene(new ChefPage(primaryStage), 1200, 700));
+					primaryStage.setScene(new Scene(new ChefPage(primaryStage, main), 1200, 700));
 				}
 				else if(user.getRole().equals("Cashier")) {
-					primaryStage.setScene(new Scene(new CashierPage(primaryStage), 1200, 700));
+					primaryStage.setScene(new Scene(new CashierPage(primaryStage, main), 1200, 700));
 				}
 				else if(user.getRole().equals("Waiter")) {
-					primaryStage.setScene(new Scene(new WaiterPage(primaryStage), 1200, 700));
+					primaryStage.setScene(new Scene(new WaiterPage(primaryStage, main), 1200, 700));
 				}
 			}
 		} catch (SQLException e) {

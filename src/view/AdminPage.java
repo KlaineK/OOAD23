@@ -1,13 +1,13 @@
 package view;
 
 import java.util.ArrayList;
-
 import controller.MenuItemController;
 import controller.UserController;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -28,7 +28,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import main.Main;
@@ -53,7 +52,7 @@ public class AdminPage extends BorderPane {
 	TableColumn colItemId, colItemName, colItemDesc, colItemPrice, colItemAction;
 	ScrollPane sp;
 	ComboBox<String> roleComboBox;
-	Button editBtn, deleteBtn;
+	Button editBtn;
 	Button itemEditBtn, itemCreateBtn;
 	
 	private void addUserDeleteButton() {
@@ -173,7 +172,7 @@ public class AdminPage extends BorderPane {
 		updateNameField = new TextArea();
 		updatePriceField = new TextArea();
 		
-		bp = new BorderPane();
+//		bp = new BorderPane();
 		title = new Label("Manage User");
 		title2 = new Label("User Data");
 		updateTitle = new Label("Update Data");
@@ -290,7 +289,6 @@ public class AdminPage extends BorderPane {
 
 				@Override
 				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
 					String status = userController.updateUser(roleComboBox.getValue(), user.getId());
 					System.out.println(status);
 					manageUser();
@@ -360,7 +358,6 @@ public class AdminPage extends BorderPane {
 
 			@Override
 			public void handle(ActionEvent event) {
-				// TODO Auto-generated method stub
 				String status = menuItemController.createMenuItem(nameField.getText(), descField.getText(), priceField.getText());
 				System.out.println(status);
 
@@ -379,7 +376,6 @@ public class AdminPage extends BorderPane {
 
 				@Override
 				public void handle(ActionEvent event) {
-					// TODO Auto-generated method stub
 					String status = menuItemController.updateMenuItem(item.getItemId(), 
 							updateNameField.getText(), updateDescField.getText(), updatePriceField.getText());
 					System.out.println(status);
@@ -413,8 +409,10 @@ public class AdminPage extends BorderPane {
 		m3.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				Stage current = (Stage) bp.getScene().getWindow();
-				current.close();
+				main.setSession(null);
+				primaryStage.setScene(new Scene(new Register(primaryStage, main), 1200, 700));
+//				Stage current = (Stage) bp.getScene().getWindow();
+//				current.close();
 			}
 		});
 		

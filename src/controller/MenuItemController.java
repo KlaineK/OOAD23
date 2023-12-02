@@ -24,7 +24,6 @@ public class MenuItemController {
 				items.add(item);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

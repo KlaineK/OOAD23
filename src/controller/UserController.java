@@ -86,8 +86,7 @@ public class UserController {
 			ResultSet rs = ps.executeQuery();
 			if(rs.next()) {
 				User user = new User(Integer.toString(rs.getInt("userId")), rs.getString("userName"), rs.getString("userEmail"), rs.getString("userPassword"), rs.getString("userRole"));
-				System.out.println(user.getUsername());
-				System.out.println(user.getPassword());
+				main.setSession(user);
 				
 				if(user.getRole().equals("Customer")) {
 					primaryStage.setScene(new Scene(new CustomerPage(primaryStage, main), 1200, 700));					

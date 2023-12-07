@@ -45,13 +45,22 @@ public class OrderController {
 	}
 	
 	public String handleOrder(String orderId) {
-		String query = String.format("UPDATE `orders` SET `orderStatus` = 'Served' WHERE `orderId` = '%d'", Integer.parseInt(orderId));
+		String query = String.format("UPDATE `orders` SET `orderStatus` = 'Prepared' WHERE `orderId` = '%d'", Integer.parseInt(orderId));
 		if(!db.execute(query)) {
 			return "Prepare failed";
 		}
 		
 		return "Prepared";
 	}
+	
+	public String serveOrder(String orderId) {
+		String query = String.format("UPDATE `orders` SET `orderStatus` = 'Served' WHERE `orderId` = '%d'", Integer.parseInt(orderId));
+		if(!db.execute(query)) {
+			return "Serving failed";
+		}
+		
+		return "Order Served";
+	}	
 	
 	public void getSession(User u) {
 		user = u;
@@ -78,6 +87,27 @@ public class OrderController {
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		else if (user.getRole().equals("Waiter")){
+			String query = String.format("SELECT `orders`.`orderId`, "
+					+ "`orders`.`orderUserId`, `users`.`userName`, "
+					+ "`orders`.`orderStatus`, `orders`.`orderTotal` "
+					+ "FROM `orders` INNER JOIN `users` ON "
+					+ "`orders`.`orderUserId` = `users`.`userId` "
+					+ "WHERE `orders`.`orderStatus` = 'Prepared'");
+			ResultSet rs = db.selectData(query);
+			
+			try {
+				while(rs.next()) {
+					orders.add(new Order(Integer.toString(rs.getInt("orderId")),
+							Integer.toString(rs.getInt("orderUserId")),
+							rs.getString("userName"), rs.getString("orderStatus"),
+							Integer.toString(rs.getInt("orderTotal"))));
+				}
+			} catch (SQLException e) {
+				// TODO: handle exception
 				e.printStackTrace();
 			}
 		}

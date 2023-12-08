@@ -347,7 +347,7 @@ public class WaiterPage extends BorderPane {
 				OrderItem item = (OrderItem)detailTable.getSelectionModel().getSelectedItem();
 				
 				itemField.setText(item.getItemName());
-				itemQuantSpin.getValueFactory().setValue(Integer.parseInt(item.getQuantity()));
+				itemQuantSpin.getValueFactory().setValue(item.getQuantity());
 				itemQuantSpin.valueProperty().addListener(new ChangeListener<Integer>() {
 
 					@Override
@@ -355,7 +355,7 @@ public class WaiterPage extends BorderPane {
 						// TODO Auto-generated method stub
 						int currentVal = itemQuantSpin.getValue();
 						
-						itemSubTotal.setText(Integer.toString(Integer.parseInt(item.getPrice()) * currentVal));
+						itemSubTotal.setText(Integer.toString(item.getPrice() * currentVal));
 					}
 					
 				});

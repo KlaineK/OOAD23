@@ -18,20 +18,28 @@ import javafx.stage.Stage;
 import main.Main;
 
 public class Login extends BorderPane {
-	public Login(Stage primaryStage, Main main) {
-		VBox container = new VBox();
-		GridPane gp = new GridPane();
+	VBox container;
+	GridPane gp;
+	Label loginTitle, email, password, warning, regis;
+	Button loginBtn;
+	TextField emailField;
+	PasswordField passField;
+	
+	//initialization and styling the layout
+	private void menu() {
+		container = new VBox();
+		gp = new GridPane();
 		
-		Label loginTitle = new Label("Login");
-		Label email = new Label("Email");
-		Label password = new Label("Password");
-		Label warning = new Label();
-		Label regis = new Label("Doens't have an account?");
+		loginTitle = new Label("Login");
+		email = new Label("Email");
+		password = new Label("Password");
+		warning = new Label();
+		regis = new Label("Doens't have an account?");
 		
-		Button loginBtn = new Button("Login");
+		loginBtn = new Button("Login");
 		
-		TextField emailField = new TextField();
-		PasswordField passField = new PasswordField();
+		emailField = new TextField();
+		passField = new PasswordField();
 		
 		gp.add(email, 0, 0);
 		gp.add(emailField, 1, 0);
@@ -54,20 +62,20 @@ public class Login extends BorderPane {
 		container.setAlignment(Pos.CENTER);
 		regis.setUnderline(true);
 		loginBtn.setPrefWidth(80);
+	}
+	
+	public Login(Stage primaryStage, Main main) {
+		menu();
 		
+		//redirect to register page
 		regis.setOnMouseClicked(e -> {
 			primaryStage.setScene(new Scene(new Register(primaryStage, main), 1200, 700));
 		});
 		
 		loginBtn.setOnMouseClicked(e -> {
-			if(emailField.getText().isEmpty() || passField.getText().isEmpty()) {
-				warning.setText("Please fill all the fields");
-			}
-			else {
-				UserController userController = new UserController();
-				String res = userController.authenticate(emailField.getText(), passField.getText(), primaryStage, main);
-				warning.setText(res);
-			}
+			UserController userController = new UserController();
+			String res = userController.authenticate(emailField.getText(), passField.getText(), primaryStage, main);
+			warning.setText(res);
 		});
 	}
 }

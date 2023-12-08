@@ -5,13 +5,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import database.Connect;
-import main.Main;
 import model.Order;
 import model.OrderItem;
 import model.User;
 
 public class OrderController {
+	//nanti ini dihapus, logic pindah ke model
 	Connect db = Connect.getInstance();
+	
+	Order order = new Order();
 	User user = null;
 	
 	public OrderController() {
@@ -27,17 +29,11 @@ public class OrderController {
 	}
 	
 	public String deleteOrder(String orderId) {
-		
-		String query = String.format("DELETE FROM `orderitems` WHERE `orderId` = '%d'", Integer.parseInt(orderId));
-		if(db.execute(query)) {
-			query = String.format("DELETE FROM `orders` WHERE `orderId` = '%d'", Integer.parseInt(orderId));
-			if(db.execute(query)) {
-				return "Delete success";
-			}
+		if(orderId.isEmpty()) {
+			return "Please select an order";
 		}
 		
-		return "Delete failed";
-		
+		return order.deleteOrder(orderId);
 	}
 	
 	public void getOrdersByCustomerId() {
@@ -45,21 +41,19 @@ public class OrderController {
 	}
 	
 	public String handleOrder(String orderId) {
-		String query = String.format("UPDATE `orders` SET `orderStatus` = 'Prepared' WHERE `orderId` = '%d'", Integer.parseInt(orderId));
-		if(!db.execute(query)) {
-			return "Prepare failed";
+		if(orderId.isEmpty()) {
+			return "Please select an order";
 		}
 		
-		return "Prepared";
+		return order.handleOrder(orderId);
 	}
 	
 	public String serveOrder(String orderId) {
-		String query = String.format("UPDATE `orders` SET `orderStatus` = 'Served' WHERE `orderId` = '%d'", Integer.parseInt(orderId));
-		if(!db.execute(query)) {
-			return "Serving failed";
+		if(orderId.isEmpty()) {
+			return "Please select an order";
 		}
 		
-		return "Order Served";
+		return order.serveOrder(orderId);
 	}	
 	
 	public void getSession(User u) {
@@ -83,7 +77,7 @@ public class OrderController {
 					orders.add(new Order(Integer.toString(rs.getInt("orderId")), 
 							Integer.toString(rs.getInt("orderUserId")), 
 							rs.getString("userName"), rs.getString("orderStatus"), 
-							Integer.toString(rs.getInt("orderTotal"))));
+							rs.getInt("orderTotal")));
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -104,7 +98,7 @@ public class OrderController {
 					orders.add(new Order(Integer.toString(rs.getInt("orderId")),
 							Integer.toString(rs.getInt("orderUserId")),
 							rs.getString("userName"), rs.getString("orderStatus"),
-							Integer.toString(rs.getInt("orderTotal"))));
+							rs.getInt("orderTotal")));
 				}
 			} catch (SQLException e) {
 				// TODO: handle exception

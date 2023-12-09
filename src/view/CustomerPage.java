@@ -3,6 +3,7 @@ package view;
 import java.util.ArrayList;
 
 import controller.MenuItemController;
+import controller.OrderController;
 import controller.UserController;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -38,6 +39,7 @@ import model.*;
 public class CustomerPage extends BorderPane {
 	ArrayList<Cart> cart = new ArrayList<Cart>();
 	MenuItemController menuItemController = new MenuItemController();
+	OrderController orderController = new OrderController();
 	Integer total = 0;
 
 	Menu menu;
@@ -45,12 +47,13 @@ public class CustomerPage extends BorderPane {
 	MenuItem m1, m2;
 	VBox container, container2, main;
 	BorderPane bp;
-	GridPane gp;
-	Label title;
+	GridPane gp, gp1;
+	Label title, totalLabel;
 	TableView itemTable, cartTable;
 	TableColumn colItemId, colItemName, colItemDesc, colItemPrice, colItemAction;
 	TableColumn colCartName, colCartDesc, colCartSubTotal, colCartQuantity, colCartAction;
 	ScrollPane sp, sp2;
+	Button btnCheckOut;
 	
 	private void calculateTotalOrder() {
 		total = 0;
@@ -65,7 +68,7 @@ public class CustomerPage extends BorderPane {
 			cartTable.getItems().add(new model.Cart(i.getNameView(), i.getDescriptionView(), i.getSubTotal(), i.getQuantity(), i.getMenuItem()));
 		}
 		calculateTotalOrder();
-		System.out.println(total);
+		totalLabel.setText("Total: Rp." + total);
 	}
 	
 	private Cart findCartByName(String name) {
@@ -187,7 +190,6 @@ public class CustomerPage extends BorderPane {
 		colBtn.setCellFactory(cellFactory);
 
 		itemTable.getColumns().add(colBtn);
-
 	}
 
 	private void menu() {
@@ -200,6 +202,8 @@ public class CustomerPage extends BorderPane {
 		container2 = new VBox();
 		main = new VBox();
 		title = new Label();
+		totalLabel = new Label();
+		btnCheckOut = new Button("Checkout Order");
 
 		itemTable = new TableView<>();
 		colItemId = new TableColumn<>("Item ID");
@@ -220,6 +224,7 @@ public class CustomerPage extends BorderPane {
 		
 		bp = new BorderPane();
 		gp = new GridPane();
+		gp1 = new GridPane();
 
 		itemTable.getColumns().addAll(colItemId, colItemName, colItemDesc, colItemPrice);
 		colItemId.setCellValueFactory(new PropertyValueFactory<>("itemId"));
@@ -253,9 +258,12 @@ public class CustomerPage extends BorderPane {
 		container2.setAlignment(Pos.TOP_CENTER);
 		gp.add(container, 0, 0);
 		gp.add(container2, 1, 0);
+		gp1.add(totalLabel, 0, 0);
+		gp1.add(btnCheckOut, 1, 0);
 		main.getChildren().addAll(title, gp);
 		bp.setTop(mb);
 		bp.setCenter(main);
+		bp.setBottom(gp1);
 		setCenter(bp);
 		sp.setHbarPolicy(ScrollBarPolicy.NEVER);
 		sp2.setHbarPolicy(ScrollBarPolicy.NEVER);
@@ -263,11 +271,19 @@ public class CustomerPage extends BorderPane {
 		gp.setMinSize(1000, 500);
 		gp.setAlignment(Pos.TOP_CENTER);
 		gp.setHgap(50);
+		gp1.setMinSize(1000, 500);
+		gp1.setAlignment(Pos.TOP_CENTER);
+		gp1.setHgap(50);
 		title.setMinHeight(100);
 		title.setFont(Font.font("Calibri", FontWeight.BOLD, FontPosture.REGULAR, 25));
+		totalLabel.setPrefHeight(100);
+		totalLabel.setAlignment(Pos.TOP_CENTER);
+		totalLabel.setFont(Font.font("Calibri", FontWeight.BOLD, FontPosture.REGULAR, 25));
 		main.setAlignment(Pos.TOP_CENTER);
 		itemTable.setMinWidth(430);
 		cartTable.setMinWidth(430);
+		btnCheckOut.setAlignment(Pos.TOP_CENTER);
+		btnCheckOut.setPrefHeight(100);
 	}
 
 	private void manageMenu() {
@@ -305,6 +321,12 @@ public class CustomerPage extends BorderPane {
 				main.setSession(null);
 				primaryStage.setScene(new Scene(new Register(primaryStage, main), 1200, 700));
 			}
+		});
+		
+		btnCheckOut.setOnMouseClicked(e -> {
+			String msg = orderController.createOrder("2", cart, total);
+			cart.removeAll(cart);
+			refreshCartTable();
 		});
 
 	}

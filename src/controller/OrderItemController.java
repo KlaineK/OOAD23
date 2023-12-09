@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import database.Connect;
+import model.Cart;
 import model.Order;
 import model.OrderItem;
 

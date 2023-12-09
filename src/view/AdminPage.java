@@ -135,6 +135,7 @@ public class AdminPage extends BorderPane {
 
     }
 	
+	//initialization and styling the layout
 	private void menu() {
 		System.out.println("Admin page");
 		menu = new Menu("Menu");
@@ -172,7 +173,6 @@ public class AdminPage extends BorderPane {
 		updateNameField = new TextArea();
 		updatePriceField = new TextArea();
 		
-//		bp = new BorderPane();
 		title = new Label("Manage User");
 		title2 = new Label("User Data");
 		updateTitle = new Label("Update Data");
@@ -223,7 +223,6 @@ public class AdminPage extends BorderPane {
 		menu.getItems().addAll(m1, m2, new SeparatorMenuItem(), m3);
 		mb.getMenus().add(menu);
 		container.getChildren().addAll(sp);
-		//KALO MAU INI EDIT GPP BUAT NENTUIN TABLENYA DI CENTER VERTICAL HORIZONTAL APA TOP DOANG
 		container.setAlignment(Pos.TOP_CENTER);
 		gp.add(container, 0, 0);
 		gp.add(container2, 1, 0);
@@ -258,8 +257,17 @@ public class AdminPage extends BorderPane {
 		itemEditBtn.setMinWidth(70);
 		itemCreateBtn.setMinWidth(70);
 		
+		updateNameField.setPrefSize(300, 10);
+		updateDescField.setPrefSize(300, 10);
+		updatePriceField.setPrefSize(300, 10);
+		
+		nameField.setPrefSize(300, 10);
+		descField.setPrefSize(300, 10);
+		priceField.setPrefSize(300, 10);
 	}
 	
+	
+	//first menu - manage user
 	private void manageUser() {
 		
 		gpUpdate.getChildren().clear();
@@ -298,6 +306,7 @@ public class AdminPage extends BorderPane {
 		
 	}
 	
+	//second menu - manage menu items
 	private void manageMenu() {
 		title.setText("Manage Menu Items");
 		title2.setText("Item Data");
@@ -331,14 +340,6 @@ public class AdminPage extends BorderPane {
 		container2.getChildren().clear();
 		container2.getChildren().addAll(title2, updateTitle, gpUpdate, itemEditBtn, createTitle, gpCreate, itemCreateBtn);
 		
-		updateNameField.setPrefSize(300, 10);
-		updateDescField.setPrefSize(300, 10);
-		updatePriceField.setPrefSize(300, 10);
-		
-		nameField.setPrefSize(300, 10);
-		descField.setPrefSize(300, 10);
-		priceField.setPrefSize(300, 10);
-		
 		updateNameField.setText("");
 		updateDescField.setText("");
 		updatePriceField.setText("");
@@ -370,7 +371,7 @@ public class AdminPage extends BorderPane {
 			updateIdField.setText(item.getItemId());
 			updateNameField.setText(item.getName());
 			updateDescField.setText(item.getDescription());
-			updatePriceField.setText(item.getPrice());
+			updatePriceField.setText(Integer.toString(item.getPrice()));
 			
 			itemEditBtn.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -406,13 +407,12 @@ public class AdminPage extends BorderPane {
 			}
 		});
 		
+		//logout and return to register page
 		m3.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				main.setSession(null);
 				primaryStage.setScene(new Scene(new Register(primaryStage, main), 1200, 700));
-//				Stage current = (Stage) bp.getScene().getWindow();
-//				current.close();
 			}
 		});
 		

@@ -1,13 +1,19 @@
 package model;
 
+import database.Connect;
+
 public class Order {
+	Connect db = Connect.getInstance();
+	
+	//attributes
 	private String id;
 	private String userId;
 	private String name;
 	private String status;
-	private String total;
+	private int total;
 	
-	public Order(String id, String userId, String name, String status, String total) {
+	//constructor to create an object
+	public Order(String id, String userId, String name, String status, int total) {
 		super();
 		this.id = id;
 		this.userId = userId;
@@ -16,6 +22,10 @@ public class Order {
 		this.total = total;
 	}
 	
+	//empty construction for declaration
+	public Order() {}
+	
+	//getters and setters
 	public String getId() {
 		return id;
 	}
@@ -40,12 +50,52 @@ public class Order {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	public String getTotal() {
+	public int getTotal() {
 		return total;
 	}
-	public void setTotal(String total) {
+	public void setTotal(int total) {
 		this.total = total;
 	}
 	
+	//function to create a new order
+	
+	//function to delete an order by id
+	public String deleteOrder(String orderId) {
+		
+		String query = String.format("DELETE FROM `orderitems` WHERE `orderId` = '%d'", Integer.parseInt(orderId));
+		if(db.execute(query)) {
+			query = String.format("DELETE FROM `orders` WHERE `orderId` = '%d'", Integer.parseInt(orderId));
+			if(db.execute(query)) {
+				return "Delete success";
+			}
+		}
+		
+		return "Delete failed";
+		
+	}
+	
+	//function to get orders from database by customer id
+	
+	//function to handle order by id
+	public String handleOrder(String orderId) {
+		String query = String.format("UPDATE `orders` SET `orderStatus` = 'Prepared' WHERE `orderId` = '%d'", Integer.parseInt(orderId));
+		if(!db.execute(query)) {
+			return "Prepare failed";
+		}
+		
+		return "Prepared";
+	}
+	
+	//function to serve order by id
+	public String serveOrder(String orderId) {
+		String query = String.format("UPDATE `orders` SET `orderStatus` = 'Served' WHERE `orderId` = '%d'", Integer.parseInt(orderId));
+		if(!db.execute(query)) {
+			return "Serving failed";
+		}
+		
+		return "Order Served";
+	}	
+	
+	//function to get order from database by order id
 	
 }

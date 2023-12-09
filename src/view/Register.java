@@ -18,24 +18,30 @@ import javafx.stage.Stage;
 import main.Main;
 
 public class Register extends BorderPane {
-	public Register (Stage primaryStage, Main main) {
-		VBox container = new VBox();
-		GridPane gp = new GridPane();
+	VBox container;
+	GridPane gp;
+	Label uname, email, password, confirmPass, regisTitle, login, warning;
+	Button regisBtn;
+	TextField unameField, emailField, passField, confirmPassField;
+	
+	private void menu() {
+		container = new VBox();
+		gp = new GridPane();
 		
-		Label uname = new Label("Username");
-		Label email = new Label("Email");
-		Label password = new Label("Password");
-		Label confirmPass = new Label("Confirm Password");
-		Label regisTitle = new Label("Register");
-		Label login = new Label("Already have an account?");
-		Label warning = new Label();
+		uname = new Label("Username");
+		email = new Label("Email");
+		password = new Label("Password");
+		confirmPass = new Label("Confirm Password");
+		regisTitle = new Label("Register");
+		login = new Label("Already have an account?");
+		warning = new Label();
 		
-		Button regisBtn = new Button("Register");
+		regisBtn = new Button("Register");
 		
-		TextField unameField = new TextField();
-		TextField emailField = new TextField();
-		PasswordField passField = new PasswordField();
-		PasswordField confirmPassField = new PasswordField();
+		unameField = new TextField();
+		emailField = new TextField();
+		passField = new PasswordField();
+		confirmPassField = new PasswordField();
 		
 		gp.setMinSize(400, 150);
 		gp.setAlignment(Pos.CENTER);
@@ -65,20 +71,20 @@ public class Register extends BorderPane {
 		container.setAlignment(Pos.CENTER);
 		login.setUnderline(true);
 		regisBtn.setPrefWidth(80);
+	}
+	
+ 	public Register (Stage primaryStage, Main main) {
+		menu();
 		
+		//redirect to login page if user already have an account
 		login.setOnMouseClicked(e -> {
 			primaryStage.setScene(new Scene(new Login(primaryStage, main), 1200, 700));
 		});
 		
 		regisBtn.setOnMouseClicked(e -> {
-			if(emailField.getText().isBlank() || passField.getText().isBlank() || confirmPassField.getText().isBlank() || unameField.getText().isBlank()) {
-				warning.setText("Please fill all the fields");
-			}
-			else {
-				UserController userController = new UserController();
-				String res = userController.creteUser(unameField.getText(), emailField.getText(), passField.getText(), confirmPassField.getText(), primaryStage, main);
-				warning.setText(res);
-			}
+			UserController userController = new UserController();
+			String res = userController.createUser(unameField.getText(), emailField.getText(), passField.getText(), confirmPassField.getText(), primaryStage, main);
+			warning.setText(res);
 		});
 	}
 }

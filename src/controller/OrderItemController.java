@@ -22,6 +22,10 @@ public class OrderItemController {
 		return orderItem.updateOrderItem(orderItemId, quantity, details, orderId);
 	}
 	
+	public String updateExistingOrderItem(String userId, ArrayList<Cart> items, Order order) {
+		return orderItem.updateExistingOrderItem(userId, items, order);
+	}
+	
 	public String deleteOrderItem(OrderItem item) {
 		if(item == null) {
 			return "Please select an item";

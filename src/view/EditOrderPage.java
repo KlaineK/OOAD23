@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import controller.MenuItemController;
 import controller.OrderController;
+import controller.OrderItemController;
 import controller.UserController;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -36,10 +37,11 @@ import javafx.util.Callback;
 import main.Main;
 import model.*;
 
-public class CustomerPage extends BorderPane {
+public class EditOrderPage extends BorderPane {
 	ArrayList<Cart> cart = new ArrayList<Cart>();
 	MenuItemController menuItemController = new MenuItemController();
 	OrderController orderController = new OrderController();
+	OrderItemController orderItemController = new OrderItemController();
 	Integer total = 0;
 
 	Menu menu;
@@ -53,7 +55,7 @@ public class CustomerPage extends BorderPane {
 	TableColumn colItemId, colItemName, colItemDesc, colItemPrice, colItemAction;
 	TableColumn colCartName, colCartDesc, colCartSubTotal, colCartQuantity, colCartAction;
 	ScrollPane sp, sp2;
-	Button btnCheckOut;
+	Button btnUpdateOrder;
 	
 	private void calculateTotalOrder() {
 		total = 0;
@@ -77,71 +79,8 @@ public class CustomerPage extends BorderPane {
 		}
 		return null;
 	}
-
-	private void actionCartButton() {
-		TableColumn<model.Cart, Void> colBtn = new TableColumn("Action");
-
-		Callback<TableColumn<model.Cart, Void>, TableCell<model.Cart, Void>> cellFactory = new Callback<TableColumn<model.Cart, Void>, TableCell<model.Cart, Void>>() {
-			@Override
-			public TableCell<model.Cart, Void> call(final TableColumn<model.Cart, Void> param) {
-				final TableCell<model.Cart, Void> cell = new TableCell<model.Cart, Void>() {
-
-					private final Button btnSub = new Button("-");
-					private final Button btnAdd = new Button("+");
-
-					{
-						btnSub.setOnAction((ActionEvent event) -> {
-							model.Cart i = getTableView().getItems().get(getIndex());
-							
-							for (Cart c : cart) {
-								if (c.getMenuItem().getName().equals(i.getMenuItem().getName())) {
-									c.setQuantity(c.getQuantity() - 1);
-									if (c.getQuantity() <= 0) {
-										cart.remove(c);
-									} else {
-										c.setSubTotal(c.getSubTotal() - c.getMenuItem().getPrice());
-									}
-									refreshCartTable();
-									break;
-								}
-							}
-						});
-						
-						btnAdd.setOnAction((ActionEvent event) -> {
-							model.Cart i = getTableView().getItems().get(getIndex());
-							
-							for (Cart c : cart) {
-								if (c.getMenuItem().getName().equals(i.getMenuItem().getName())) {
-									c.setQuantity(c.getQuantity() + 1);
-									c.setSubTotal(c.getSubTotal() + c.getMenuItem().getPrice());
-									refreshCartTable();
-									break;
-								}
-							}
-						});
-					}
-
-					@Override
-					public void updateItem(Void item, boolean empty) {
-						super.updateItem(item, empty);
-						if (empty) {
-							setGraphic(null);
-						} else {
-							HBox pane = new HBox(btnSub, btnAdd);
-							setGraphic(pane);
-						}
-					}
-				};
-				return cell;
-			}
-		};
-
-		colBtn.setCellFactory(cellFactory);
-
-		cartTable.getColumns().add(colBtn);
-	}
 	
-	private void addItemToCartButton() {
+	private void addNewItemButton() {
 		TableColumn<model.MenuItem, Void> colBtn = new TableColumn("Action");
 
 		Callback<TableColumn<model.MenuItem, Void>, TableCell<model.MenuItem, Void>> cellFactory = new Callback<TableColumn<model.MenuItem, Void>, TableCell<model.MenuItem, Void>>() {
@@ -149,7 +88,7 @@ public class CustomerPage extends BorderPane {
 			public TableCell<model.MenuItem, Void> call(final TableColumn<model.MenuItem, Void> param) {
 				final TableCell<model.MenuItem, Void> cell = new TableCell<model.MenuItem, Void>() {
 
-					private final Button btn = new Button("Add to Cart");
+					private final Button btn = new Button("Add to Existing Order");
 
 					{
 						btn.setOnAction((ActionEvent event) -> {
@@ -193,9 +132,9 @@ public class CustomerPage extends BorderPane {
 	}
 
 	private void menu() {
-		System.out.println("Customer page");
+		System.out.println("Edit Order page");
 		menu = new Menu("Menu");
-		m1 = new MenuItem("Order Menu");
+		m1 = new MenuItem("Chef Page");
 		m2 = new MenuItem("Logout");
 		mb = new MenuBar();
 		container = new VBox();
@@ -203,7 +142,7 @@ public class CustomerPage extends BorderPane {
 		main = new VBox();
 		title = new Label();
 		totalLabel = new Label();
-		btnCheckOut = new Button("Checkout Order");
+		btnUpdateOrder = new Button("Update Order");
 
 		itemTable = new TableView<>();
 		colItemId = new TableColumn<>("Item ID");
@@ -217,7 +156,6 @@ public class CustomerPage extends BorderPane {
 		colCartDesc = new TableColumn<>("Description");
 		colCartSubTotal = new TableColumn<>("Subtotal");
 		colCartQuantity = new TableColumn<>("Quantity");
-		colCartAction = new TableColumn<>("Action");
 
 		sp = new ScrollPane();
 		sp2 = new ScrollPane();
@@ -231,14 +169,13 @@ public class CustomerPage extends BorderPane {
 		colItemName.setCellValueFactory(new PropertyValueFactory<>("name"));
 		colItemDesc.setCellValueFactory(new PropertyValueFactory<>("description"));
 		colItemPrice.setCellValueFactory(new PropertyValueFactory<>("price"));
-		addItemToCartButton();
+		addNewItemButton();
 		
 		cartTable.getColumns().addAll(colCartName, colCartDesc, colCartSubTotal, colCartQuantity);
 		colCartName.setCellValueFactory(new PropertyValueFactory<>("nameView"));
 		colCartDesc.setCellValueFactory(new PropertyValueFactory<>("descriptionView"));
 		colCartSubTotal.setCellValueFactory(new PropertyValueFactory<>("subTotal"));
 		colCartQuantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
-		actionCartButton();
 		
 		colItemId.prefWidthProperty().bind(itemTable.widthProperty().divide(5));
 		colItemName.prefWidthProperty().bind(itemTable.widthProperty().divide(5));
@@ -259,7 +196,7 @@ public class CustomerPage extends BorderPane {
 		gp.add(container, 0, 0);
 		gp.add(container2, 1, 0);
 		gp1.add(totalLabel, 0, 0);
-		gp1.add(btnCheckOut, 1, 0);
+		gp1.add(btnUpdateOrder, 1, 0);
 		main.getChildren().addAll(title, gp);
 		bp.setTop(mb);
 		bp.setCenter(main);
@@ -274,7 +211,7 @@ public class CustomerPage extends BorderPane {
 		gp1.setMinSize(1000, 500);
 		gp1.setAlignment(Pos.TOP_CENTER);
 		gp1.setHgap(50);
-		GridPane.setMargin(btnCheckOut, new Insets(0, 0, 65, 10));
+		GridPane.setMargin(btnUpdateOrder, new Insets(0, 0, 65, 10));
 		title.setMinHeight(100);
 		title.setFont(Font.font("Calibri", FontWeight.BOLD, FontPosture.REGULAR, 25));
 		totalLabel.setPrefHeight(100);
@@ -283,35 +220,43 @@ public class CustomerPage extends BorderPane {
 		main.setAlignment(Pos.TOP_CENTER);
 		itemTable.setMinWidth(430);
 		cartTable.setMinWidth(430);
-		btnCheckOut.setAlignment(Pos.TOP_CENTER);
+		btnUpdateOrder.setAlignment(Pos.TOP_CENTER);
 	}
 
-	private void manageMenu() {
-		title.setText("Order Page");
+	private void manageMenu(Order order) {
+		title.setText("Edit Order Page");
 
 		sp.setContent(itemTable);
 		sp2.setContent(cartTable);
 
 		ArrayList<model.MenuItem> menus = menuItemController.getAllMenuItem();
+		ArrayList<model.OrderItem> orderItems = orderItemController.getAllOrderItemsByOrderId(order.getId());
 
 		itemTable.getItems().clear();
 		for (model.MenuItem m : menus) {
 			itemTable.getItems().add(new model.MenuItem(m.getItemId(), m.getName(), m.getDescription(), m.getPrice()));
 		}
 		
+		cartTable.getItems().clear();
+		for (OrderItem orderItem : orderItems) {
+			model.MenuItem menu = menuItemController.getMenuItemById(Integer.parseInt(orderItem.getItemId()));
+			Cart addCart = new Cart(menu.getName(), menu.getDescription(), menu.getPrice() * orderItem.getQuantity(), orderItem.getQuantity(), menu);
+			cart.add(addCart);	
+		}
+		
 		refreshCartTable();
 	}
 
-	public CustomerPage(Stage primaryStage, Main main) {
-		primaryStage.setTitle("Customer Page");
+	public EditOrderPage(Stage primaryStage, Main main, Order order) {
+		primaryStage.setTitle("Edit Order Page");
 
 		menu();
-		manageMenu();
+		manageMenu(order);
 
 		m1.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				manageMenu();
+				primaryStage.setScene(new Scene(new ChefPage(primaryStage, main), 1200, 700));
 			}
 		});
 
@@ -323,10 +268,9 @@ public class CustomerPage extends BorderPane {
 			}
 		});
 		
-		btnCheckOut.setOnMouseClicked(e -> {
-			String msg = orderController.createOrder(main.getSession().getId(), cart, total);
-			cart.removeAll(cart);
-			refreshCartTable();
+		btnUpdateOrder.setOnMouseClicked(e -> {
+			String msg = orderItemController.updateExistingOrderItem(main.getSession().getId(), cart, order);
+			primaryStage.setScene(new Scene(new ChefPage(primaryStage, main), 1200, 700));
 		});
 
 	}

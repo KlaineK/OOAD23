@@ -53,6 +53,7 @@ public class ChefPage extends BorderPane {
 	TableColumn detailOrderId, detailItemName, detailQuantity, detailId, detailItemId, detailItemPrice;
 	ScrollPane spOrder, spDetail;
 	
+	//function to add delete button to table
 	private void addOrderDeleteButton() {
         TableColumn<Order, Void> colBtn = new TableColumn("Delete");
 
@@ -93,6 +94,7 @@ public class ChefPage extends BorderPane {
 
     }
 	
+	//function to add handle button to table
 	private void addOrderHandleButton() {
         TableColumn<Order, Void> colBtn = new TableColumn("Handle");
 
@@ -133,6 +135,7 @@ public class ChefPage extends BorderPane {
 
     }
 
+	//function to add detail delete button to table
 	private void addDetailDeleteButton() {
         TableColumn<OrderItem, Void> colBtn = new TableColumn("Action");
 
@@ -173,6 +176,7 @@ public class ChefPage extends BorderPane {
 
     }
 	
+	//initializing and styling the layout
 	public void menu(Main main) {
 		orderController.getSession(main.getSession());
 		System.out.println("Chef Page");
@@ -281,6 +285,7 @@ public class ChefPage extends BorderPane {
 		addDetailDeleteButton();
 	}
 	
+	//function to handle order when handle order button is pressed
 	public void handleOrder() {
 		gpForm.getChildren().clear();
 		gpForm.add(itemLabel, 0, 0);
@@ -318,7 +323,7 @@ public class ChefPage extends BorderPane {
 			detailTable.setOnMouseClicked(e1 -> {
 				OrderItem item = (OrderItem) detailTable.getSelectionModel().getSelectedItem();
 				itemField.setText(item.getItemName());
-				qtySpinner.getValueFactory().setValue(Integer.parseInt(item.getQuantity()));
+				qtySpinner.getValueFactory().setValue(item.getQuantity());
 				
 				updateBtn.setOnAction(new EventHandler<ActionEvent>() {
 					
@@ -335,8 +340,8 @@ public class ChefPage extends BorderPane {
 		
 	}
 	
+	//constructor
 	public ChefPage(Stage primaryStage, Main main) {
-		// TODO Auto-generated constructor stub
 		menu(main);
 		handleOrder();
 		
@@ -348,11 +353,11 @@ public class ChefPage extends BorderPane {
 			}
 		});
 		
+		//logout and redirect to register page
 		m2.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent event) {
-				// TODO Auto-generated method stub
 				main.setSession(null);
 				primaryStage.setScene(new Scene(new Register(primaryStage, main), 1200, 700));
 			}

@@ -76,6 +76,7 @@ public class WaiterPage extends BorderPane {
                 		servebtn.setPrefWidth(75);
                 		changebtn.setPrefWidth(75);
                 		
+                		//button to delete order
                         delbtn.setOnAction((ActionEvent event) -> {
                             Order order = getTableView().getItems().get(getIndex());
                             String act = orderController.deleteOrder(order.getId());
@@ -83,6 +84,7 @@ public class WaiterPage extends BorderPane {
                             serve();
                         });
                         
+                        //button to change the content of the order
 						changebtn.setOnAction((ActionEvent event) -> {
 //                          Order order = getTableView().getItems().get(getIndex());
 //                          String act = orderController.serveOrder(order.getId());
@@ -91,6 +93,7 @@ public class WaiterPage extends BorderPane {
 //                          serve();
 						});
 						
+						//button to change the status of the order to served
                         servebtn.setOnAction((ActionEvent event) -> {
                             Order order = getTableView().getItems().get(getIndex());
                             String act = orderController.serveOrder(order.getId());
@@ -136,6 +139,7 @@ public class WaiterPage extends BorderPane {
                     private final Button detailDelBtn = new Button("Delete");
 
                     {
+                    	//button to delete the menu item in the selected order
                     	detailDelBtn.setOnAction((ActionEvent event) -> {
                             OrderItem order = getTableView().getItems().get(getIndex());
                             String act = orderItemController.deleteOrderItem(order);

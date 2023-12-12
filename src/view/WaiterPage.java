@@ -24,7 +24,9 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
@@ -42,7 +44,7 @@ public class WaiterPage extends BorderPane {
 	
 	Menu menu;
 	MenuBar mb;
-	MenuItem m1, m2;
+	MenuItem m1, m2; 
 	VBox mainbox, orderContainer, detailContainer;
 	BorderPane bp;
 	GridPane gpOrder, gpForm;
@@ -55,56 +57,40 @@ public class WaiterPage extends BorderPane {
 	TableColumn detailOrderId, detailItemName, detailQuantity, detailId, detailItemId, detailItemPrice;
 	ScrollPane spOrder, spDetail;
 
-    private void orderDeleteButton() {
-        TableColumn<Order, Void> orderDel = new TableColumn("Delete Order");
+    private void orderActionColumn() {
+        TableColumn<Order, Void> orderAct = new TableColumn("Action");
 
         Callback<TableColumn<Order, Void>, TableCell<Order, Void>> cellFactory = new Callback<TableColumn<Order, Void>, TableCell<Order, Void>>() {
             @Override
             public TableCell<Order, Void> call(final TableColumn<Order, Void> param) {
                 final TableCell<Order, Void> cell = new TableCell<Order, Void>() {
-
-                    private final Button delbtn = new Button("Delete");
-
-                    {
+                	
+                	private final HBox actions;
+                	
+                	{
+                		Button delbtn = new Button("Delete");
+                		Button changebtn = new Button("Add New");
+                		Button servebtn = new Button("Serve");
+                		
+                		delbtn.setPrefWidth(75);
+                		servebtn.setPrefWidth(75);
+                		changebtn.setPrefWidth(75);
+                		
                         delbtn.setOnAction((ActionEvent event) -> {
                             Order order = getTableView().getItems().get(getIndex());
                             String act = orderController.deleteOrder(order.getId());
                             System.out.println(act);
                             serve();
                         });
-                    }
+                        
+						changebtn.setOnAction((ActionEvent event) -> {
+//                          Order order = getTableView().getItems().get(getIndex());
+//                          String act = orderController.serveOrder(order.getId());
+//                          System.out.println(act);
 
-                    @Override
-                    public void updateItem(Void item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (empty) {
-                            setGraphic(null);
-                        } else {
-                            setGraphic(delbtn);
-                        }
-                    }
-                };
-                return cell;
-            }
-        };
-
-        orderDel.setCellFactory(cellFactory);
-
-        orderTable.getColumns().add(orderDel);
-
-    }
-
-    private void orderServeButton() {
-        TableColumn<Order, Void> serveOrder = new TableColumn("Serve Order");
-
-        Callback<TableColumn<Order, Void>, TableCell<Order, Void>> cellFactory = new Callback<TableColumn<Order, Void>, TableCell<Order, Void>>() {
-            @Override
-            public TableCell<Order, Void> call(final TableColumn<Order, Void> param) {
-                final TableCell<Order, Void> cell = new TableCell<Order, Void>() {
-
-                    private final Button servebtn = new Button("Serve");
-
-                    {
+//                          serve();
+						});
+						
                         servebtn.setOnAction((ActionEvent event) -> {
                             Order order = getTableView().getItems().get(getIndex());
                             String act = orderController.serveOrder(order.getId());
@@ -112,28 +98,33 @@ public class WaiterPage extends BorderPane {
                             
                             serve();
                         });
-                    }
+                		
+                		actions = new HBox(5, servebtn, changebtn, delbtn);
+                		actions.setAlignment(Pos.CENTER);
+                		
+                	}
 
-                    @Override
-                    public void updateItem(Void item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (empty) {
-                            setGraphic(null);
-                        } else {
-                            setGraphic(servebtn);
-                        }
-                    }
+                	@Override
+                	public void updateItem(Void item, boolean empty) {
+                		super.updateItem(item, empty);
+                		if (empty) {
+                			setGraphic(null);
+                		} else {
+                			setGraphic(empty ? null : actions);
+                		}
+                	}
+                    
                 };
                 return cell;
             }
         };
 
-        serveOrder.setCellFactory(cellFactory);
+        orderAct.setCellFactory(cellFactory);
 
-        orderTable.getColumns().add(serveOrder);
+        orderTable.getColumns().add(orderAct);
 
     }
-    
+
     private void detailDeleteButton() {
         TableColumn<OrderItem, Void> detailDel = new TableColumn("Delete Item");
 
@@ -190,7 +181,7 @@ public class WaiterPage extends BorderPane {
 		gpForm = new GridPane();
 		spOrder = new ScrollPane();
 		spDetail = new ScrollPane();
-		
+
 		//Title label init
 		orderTitle = new Label("Orders");
 		detailTitle = new Label("Order Details");
@@ -226,8 +217,7 @@ public class WaiterPage extends BorderPane {
 		
 		updateBtn = new Button("Update");
 		menuSetup();
-		orderDeleteButton();
-		orderServeButton();
+		orderActionColumn();
 		detailDeleteButton();
 	}
 	
@@ -238,6 +228,11 @@ public class WaiterPage extends BorderPane {
 		orderName.setCellValueFactory(new PropertyValueFactory<>("name"));
 		orderStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
 		orderTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
+		
+		orderId.setStyle("-fx-alignment: CENTER");
+		orderName.setStyle("-fx-alignment: CENTER");
+		orderStatus.setStyle("-fx-alignment: CENTER");
+		orderTotal.setStyle("-fx-alignment: CENTER");
 		
 		orderId.prefWidthProperty().bind(orderTable.widthProperty().divide(6));
 		orderName.prefWidthProperty().bind(orderTable.widthProperty().divide(6));
@@ -256,6 +251,13 @@ public class WaiterPage extends BorderPane {
 		detailQuantity.setCellValueFactory(new PropertyValueFactory("quantity"));
 		detailItemPrice.setCellValueFactory(new PropertyValueFactory("price"));
 		
+		detailId.setStyle("-fx-alignment: CENTER");
+		detailOrderId.setStyle("-fx-alignment: CENTER");
+		detailItemId.setStyle("-fx-alignment: CENTER");
+		detailItemName.setStyle("-fx-alignment: CENTER");
+		detailQuantity.setStyle("-fx-alignment: CENTER");
+		detailItemPrice.setStyle("-fx-alignment: CENTER");
+		
 		detailOrderId.prefWidthProperty().bind(detailTable.widthProperty().divide(6));
 		detailItemName.prefWidthProperty().bind(detailTable.widthProperty().divide(6));
 		detailQuantity.prefWidthProperty().bind(detailTable.widthProperty().divide(6));
@@ -269,6 +271,9 @@ public class WaiterPage extends BorderPane {
 		//container setup
 		gpOrder.add(orderContainer, 0, 0);
 		gpOrder.add(detailContainer, 1, 0);
+		
+		//alternative of using gpOrder : scroll pane
+		//container(VBox) can only be added in 1 pane
 		gpForm.add(itemLabel, 0, 0);
 		gpForm.add(itemField, 1, 0);
 		gpForm.add(itemQuan, 0, 1);
@@ -306,6 +311,7 @@ public class WaiterPage extends BorderPane {
 		mainbox.setAlignment(Pos.TOP_CENTER);
 		orderTable.setPrefSize(480, 500);
 		detailTable.setPrefSize(480, 300);
+		
 		gpOrder.setAlignment(Pos.CENTER);
 		gpOrder.setMinSize(1000, 500);
 		gpOrder.setHgap(50);
@@ -352,7 +358,6 @@ public class WaiterPage extends BorderPane {
 
 					@Override
 					public void changed(ObservableValue<? extends Integer> arg0, Integer arg1, Integer arg2) {
-						// TODO Auto-generated method stub
 						int currentVal = itemQuantSpin.getValue();
 						
 						itemSubTotal.setText(Integer.toString(Integer.parseInt(item.getPrice()) * currentVal));

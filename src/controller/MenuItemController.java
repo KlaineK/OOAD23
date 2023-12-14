@@ -11,6 +11,10 @@ public class MenuItemController {
 		return menuItem.getAllMenuItem();
 	}
 	
+	public MenuItem getMenuItemById(Integer id) {
+		return menuItem.getMenuItemById(id);
+	}
+	
 	public String createMenuItem(String name, String desc, String price) {
 		if(name.isEmpty() || desc.isEmpty() || price.isEmpty()) {
 			return "Please fill all the fields";

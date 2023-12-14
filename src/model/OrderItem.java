@@ -96,6 +96,38 @@ public class OrderItem {
 		return "Update failed";
 	}
 	
+	public String updateExistingOrderItem(String userId, ArrayList<Cart> details, Order order) {
+		for (Cart cart : details) {
+			String query = String.format("SELECT * FROM `orderitems` INNER JOIN `menuitems` ON `orderitems`.`menuItemId` = `menuitems`.`menuItemId` WHERE `orderitems`.`menuItemId` = %d AND `orderitems`.`orderId` = %d", 
+					Integer.parseInt(cart.getMenuItem().getItemId()), Integer.parseInt(order.getId()));
+
+			ResultSet res = db.selectData(query);
+			OrderItem oi = null;
+			
+			try {
+				while(res.next()) {
+					oi = new OrderItem(Integer.toString(res.getInt("orderItemsId")), 
+							Integer.toString(res.getInt("orderId")), Integer.toString(res.getInt("menuItemId")), 
+							res.getString("menuItemName"), res.getInt("quantity"), res.getInt("menuItemPrice"));
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+				return e.toString();
+			}
+			
+			if (oi == null) {
+				query = String.format("INSERT INTO `orderitems` (`orderId`, `menuItemId`, `quantity`) "
+						+ "VALUES ('%d', '%d', '%d')", Integer.parseInt(order.getId()), Integer.parseInt(cart.getMenuItem().getItemId()), cart.getQuantity());
+				db.execute(query);
+			} else {
+				query = String.format("UPDATE `orderitems` SET `quantity` = '%d' WHERE `orderItemsId` = '%d'", cart.getQuantity(), Integer.parseInt(oi.getId()));
+				db.execute(query);
+			}
+		}
+		
+		return "Success";
+	}
+	
 	//function to delete order item by id
 	public String deleteOrderItem(OrderItem item) {
 		String query = String.format("DELETE FROM `orderitems` WHERE `orderItemsId` = '%d'", Integer.parseInt(item.getId()));

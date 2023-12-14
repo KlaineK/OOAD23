@@ -74,6 +74,25 @@ public class MenuItem {
 		return items;
 	}
 	
+	public MenuItem getMenuItemById(Integer id) {
+		String query = String.format("SELECT * FROM `menuitems` WHERE `menuItemId` = %d", id);
+
+		ResultSet res = db.selectData(query);
+		MenuItem item = null;
+		
+		try {
+			while(res.next()) {
+				item = new MenuItem(Integer.toString(res.getInt("menuItemId")), 
+						res.getString("menuItemName"), res.getString("menuItemDescription"), 
+						res.getInt("menuItemPrice"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return item;
+	}
+	
 	//function to create new menu item
 	public String createMenuItem(String name, String desc, String price) {
 

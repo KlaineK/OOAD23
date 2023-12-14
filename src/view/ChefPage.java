@@ -24,6 +24,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
@@ -53,50 +54,9 @@ public class ChefPage extends BorderPane {
 	TableColumn detailOrderId, detailItemName, detailQuantity, detailId, detailItemId, detailItemPrice;
 	ScrollPane spOrder, spDetail;
 	
-	//function to add delete button to table
-	private void addOrderDeleteButton() {
-        TableColumn<Order, Void> colBtn = new TableColumn("Delete");
-
-        Callback<TableColumn<Order, Void>, TableCell<Order, Void>> cellFactory = new Callback<TableColumn<Order, Void>, TableCell<Order, Void>>() {
-            @Override
-            public TableCell<Order, Void> call(final TableColumn<Order, Void> param) {
-                final TableCell<Order, Void> cell = new TableCell<Order, Void>() {
-
-                    private final Button deleteBtn = new Button("Delete");
-
-                    {
-                        deleteBtn.setOnAction((ActionEvent event) -> {
-                        	Order order = getTableView().getItems().get(getIndex());
-                        	String res = orderController.deleteOrder(order.getId());
-                        	System.out.println(res);
-                        	
-                        	handleOrder();
-                        });
-                    }
-
-                    @Override
-                    public void updateItem(Void item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (empty) {
-                            setGraphic(null);
-                        } else {
-                            setGraphic(deleteBtn);
-                        }
-                    }
-                };
-                return cell;
-            }
-        };
-
-        colBtn.setCellFactory(cellFactory);
-
-        orderTable.getColumns().add(colBtn);
-
-    }
-	
 	//function to add handle button to table
-	private void addOrderHandleButton() {
-        TableColumn<Order, Void> colBtn = new TableColumn("Handle");
+	private void addOrderActionButton(Stage primaryStage, Main main) {
+        TableColumn<Order, Void> colBtn = new TableColumn("Action");
 
         Callback<TableColumn<Order, Void>, TableCell<Order, Void>> cellFactory = new Callback<TableColumn<Order, Void>, TableCell<Order, Void>>() {
             @Override
@@ -104,6 +64,8 @@ public class ChefPage extends BorderPane {
                 final TableCell<Order, Void> cell = new TableCell<Order, Void>() {
 
                     private final Button btn = new Button("Handle");
+                    private final Button btnDel = new Button("Delete");
+                    private final Button btnEdit = new Button("Edit");
 
                     {
                         btn.setOnAction((ActionEvent event) -> {
@@ -113,6 +75,19 @@ public class ChefPage extends BorderPane {
                             
                             handleOrder();
                         });
+                        
+                        btnDel.setOnAction((ActionEvent event) -> {
+                        	Order order = getTableView().getItems().get(getIndex());
+                        	String res = orderController.deleteOrder(order.getId());
+                        	System.out.println(res);
+                        	
+                        	handleOrder();
+                        });
+                        
+                        btnEdit.setOnAction((ActionEvent event) -> {
+                        	Order order = getTableView().getItems().get(getIndex());
+                        	primaryStage.setScene(new Scene(new EditOrderPage(primaryStage, main, order), 1200, 700));
+                        });
                     }
 
                     @Override
@@ -121,7 +96,8 @@ public class ChefPage extends BorderPane {
                         if (empty) {
                             setGraphic(null);
                         } else {
-                            setGraphic(btn);
+                        	HBox pane = new HBox(btn, btnDel, btnEdit);
+                            setGraphic(pane);
                         }
                     }
                 };
@@ -177,7 +153,7 @@ public class ChefPage extends BorderPane {
     }
 	
 	//initializing and styling the layout
-	public void menu(Main main) {
+	public void menu(Main main, Stage primaryStage) {
 		orderController.getSession(main.getSession());
 		System.out.println("Chef Page");
 		menu = new Menu("Menu");
@@ -280,8 +256,7 @@ public class ChefPage extends BorderPane {
 		qtySpinner.setPrefWidth(100);
 		VBox.setMargin(warning, new Insets(7, 0, 5, 0));
 		updateBtn.setPrefWidth(70);
-		addOrderHandleButton();
-		addOrderDeleteButton();
+		addOrderActionButton(primaryStage, main);
 		addDetailDeleteButton();
 	}
 	
@@ -342,7 +317,7 @@ public class ChefPage extends BorderPane {
 	
 	//constructor
 	public ChefPage(Stage primaryStage, Main main) {
-		menu(main);
+		menu(main, primaryStage);
 		handleOrder();
 		
 		m1.setOnAction(new EventHandler<ActionEvent>() {

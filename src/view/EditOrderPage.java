@@ -270,7 +270,12 @@ public class EditOrderPage extends BorderPane {
 		
 		btnUpdateOrder.setOnMouseClicked(e -> {
 			String msg = orderItemController.updateExistingOrderItem(main.getSession().getId(), cart, order);
-			primaryStage.setScene(new Scene(new ChefPage(primaryStage, main), 1200, 700));
+			if(main.getSession().getRole().equals("Chef")) {
+				primaryStage.setScene(new Scene(new ChefPage(primaryStage, main), 1200, 700));				
+			}
+			else if(main.getSession().getRole().equals("Waiter")) {
+				primaryStage.setScene(new Scene(new WaiterPage(primaryStage, main), 1200, 700));
+			}
 		});
 
 	}

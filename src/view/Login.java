@@ -34,7 +34,7 @@ public class Login extends BorderPane {
 		email = new Label("Email");
 		password = new Label("Password");
 		warning = new Label();
-		regis = new Label("Doens't have an account?");
+		regis = new Label("Don't have an account?");
 		
 		loginBtn = new Button("Login");
 		

@@ -125,7 +125,36 @@ public class OrderItem {
 			}
 		}
 		
-		return "Success";
+		String updateTotalMsg = updateTotalOrder(order);
+		
+		return "Success Update Order Item and " + updateTotalMsg;
+	}
+	
+	public String updateTotalOrder(Order order) {
+		String query = String.format("SELECT * FROM `orderitems` INNER JOIN `menuitems` ON `orderitems`.`menuItemId` = `menuitems`.`menuItemId` WHERE `orderitems`.`orderId` = %d", Integer.parseInt(order.getId()));
+		Integer total = 0;
+		ResultSet res = db.selectData(query);
+		
+		try {
+			while(res.next()) {
+				OrderItem oi = null;
+				oi = new OrderItem(Integer.toString(res.getInt("orderItemsId")), 
+						Integer.toString(res.getInt("orderId")), Integer.toString(res.getInt("menuItemId")), 
+						res.getString("menuItemName"), res.getInt("quantity"), res.getInt("menuItemPrice"));
+				
+				total += oi.getPrice() * oi.getQuantity();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return e.toString();
+		}
+		
+		query = String.format("UPDATE `orders` SET `orderTotal` = '%d' WHERE `orderId` = '%d'", total, Integer.parseInt(order.getId()));
+		if(db.execute(query)) {
+			return "Success Update Total.";				
+		}
+		
+		return "Update failed";
 	}
 	
 	//function to delete order item by id

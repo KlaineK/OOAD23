@@ -127,14 +127,18 @@ public class EditOrderPage extends BorderPane {
 		};
 
 		colBtn.setCellFactory(cellFactory);
-
+		colBtn.setStyle("-fx-alignment: CENTER");
 		itemTable.getColumns().add(colBtn);
 	}
 
-	private void menu() {
+	private void menu(Main user) {
 		System.out.println("Edit Order page");
 		menu = new Menu("Menu");
-		m1 = new MenuItem("Chef Page");
+		if(user.getSession().getRole().equals("Waiter")) {
+			m1 = new MenuItem("Waiter Page");			
+		}else if (user.getSession().getRole().equals("Chef")) {			
+			m1 = new MenuItem("Chef Page");			
+		}
 		m2 = new MenuItem("Logout");
 		mb = new MenuBar();
 		container = new VBox();
@@ -151,11 +155,22 @@ public class EditOrderPage extends BorderPane {
 		colItemPrice = new TableColumn<>("Price");
 		colItemAction = new TableColumn<>("Add to Cart");
 		
+		colItemId.setStyle("-fx-alignment: CENTER");
+		colItemName.setStyle("-fx-alignment: CENTER");
+		colItemDesc.setStyle("-fx-alignment: CENTER");
+		colItemPrice.setStyle("-fx-alignment: CENTER");
+		colItemAction.setStyle("-fx-alignment: CENTER");
+		
 		cartTable = new TableView<>();
 		colCartName = new TableColumn<>("Name");
 		colCartDesc = new TableColumn<>("Description");
 		colCartSubTotal = new TableColumn<>("Subtotal");
 		colCartQuantity = new TableColumn<>("Quantity");
+		
+		colCartName.setStyle("-fx-alignment: CENTER");
+		colCartDesc.setStyle("-fx-alignment: CENTER");
+		colCartSubTotal.setStyle("-fx-alignment: CENTER");
+		colCartQuantity.setStyle("-fx-alignment: CENTER");
 
 		sp = new ScrollPane();
 		sp2 = new ScrollPane();
@@ -250,7 +265,7 @@ public class EditOrderPage extends BorderPane {
 	public EditOrderPage(Stage primaryStage, Main main, Order order) {
 		primaryStage.setTitle("Edit Order Page");
 
-		menu();
+		menu(main);
 		manageMenu(order);
 
 		m1.setOnAction(new EventHandler<ActionEvent>() {

@@ -90,7 +90,7 @@ public class AdminPage extends BorderPane {
         };
 
         colBtn.setCellFactory(cellFactory);
-
+        colBtn.setStyle("-fx-alignment: CENTER");
         table.getColumns().add(colBtn);
 
     }
@@ -130,7 +130,7 @@ public class AdminPage extends BorderPane {
         };
 
         colBtn.setCellFactory(cellFactory);
-
+        colBtn.setStyle("-fx-alignment: CENTER");
         itemTable.getColumns().add(colBtn);
 
     }
@@ -154,12 +154,25 @@ public class AdminPage extends BorderPane {
 		role = new TableColumn<>("Role");
 		action = new TableColumn<>("Delete");
 		
+		id.setStyle("-fx-alignment: CENTER");
+		uname.setStyle("-fx-alignment: CENTER");
+		email.setStyle("-fx-alignment: CENTER");
+		pass.setStyle("-fx-alignment: CENTER");
+		role.setStyle("-fx-alignment: CENTER");
+		action.setStyle("-fx-alignment: CENTER");
+		
 		itemTable = new TableView<>();
 		colItemId = new TableColumn<>("Item ID");
 		colItemName = new TableColumn<>("Name");
 		colItemDesc = new TableColumn<>("Description");
 		colItemPrice = new TableColumn<>("Price");
 		colItemAction = new TableColumn<>("Delete");
+		
+		colItemId.setStyle("-fx-alignment: CENTER");
+		colItemName.setStyle("-fx-alignment: CENTER");
+		colItemDesc.setStyle("-fx-alignment: CENTER");
+		colItemPrice.setStyle("-fx-alignment: CENTER");
+		colItemAction.setStyle("-fx-alignment: CENTER");		
 		
 		sp = new ScrollPane();
 		roleComboBox = new ComboBox<>();

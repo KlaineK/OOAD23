@@ -378,6 +378,8 @@ public class WaiterPage extends BorderPane {
 	}
 
 	public WaiterPage(Stage primaryStage, Main main) {
+		primaryStage.setTitle("Waiter Page");
+		
 		menuInit(primaryStage, main);
 		serve();
 

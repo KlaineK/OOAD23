@@ -137,7 +137,7 @@ public class CustomerPage extends BorderPane {
 		};
 
 		colBtn.setCellFactory(cellFactory);
-
+		colBtn.setStyle("-fx-alignment: CENTER");
 		cartTable.getColumns().add(colBtn);
 	}
 	
@@ -188,7 +188,7 @@ public class CustomerPage extends BorderPane {
 		};
 
 		colBtn.setCellFactory(cellFactory);
-
+		colBtn.setStyle("-fx-alignment: CENTER");
 		itemTable.getColumns().add(colBtn);
 	}
 
@@ -212,12 +212,24 @@ public class CustomerPage extends BorderPane {
 		colItemPrice = new TableColumn<>("Price");
 		colItemAction = new TableColumn<>("Add to Cart");
 		
+		colItemId.setStyle("-fx-alignment: CENTER");
+		colItemName.setStyle("-fx-alignment: CENTER");
+		colItemDesc.setStyle("-fx-alignment: CENTER");
+		colItemPrice.setStyle("-fx-alignment: CENTER");
+		colItemAction.setStyle("-fx-alignment: CENTER");
+		
 		cartTable = new TableView<>();
 		colCartName = new TableColumn<>("Name");
 		colCartDesc = new TableColumn<>("Description");
 		colCartSubTotal = new TableColumn<>("Subtotal");
 		colCartQuantity = new TableColumn<>("Quantity");
 		colCartAction = new TableColumn<>("Action");
+		
+		colCartName.setStyle("-fx-alignment: CENTER");
+		colCartDesc.setStyle("-fx-alignment: CENTER");
+		colCartSubTotal.setStyle("-fx-alignment: CENTER");
+		colCartQuantity.setStyle("-fx-alignment: CENTER");
+		colCartAction.setStyle("-fx-alignment: CENTER");
 
 		sp = new ScrollPane();
 		sp2 = new ScrollPane();

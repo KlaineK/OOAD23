@@ -106,7 +106,7 @@ public class ChefPage extends BorderPane {
         };
 
         colBtn.setCellFactory(cellFactory);
-
+        colBtn.setStyle("-fx-alignment: CENTER");
         orderTable.getColumns().add(colBtn);
 
     }
@@ -147,7 +147,7 @@ public class ChefPage extends BorderPane {
         };
 
         colBtn.setCellFactory(cellFactory);
-
+        colBtn.setStyle("-fx-alignment: CENTER");
         detailTable.getColumns().add(colBtn);
 
     }
@@ -186,6 +186,12 @@ public class ChefPage extends BorderPane {
 		orderUserId = new TableColumn<>("User ID");
 		orderTotal = new TableColumn<>("Order Total");
 		
+		orderId.setStyle("-fx-alignment: CENTER");
+		orderName.setStyle("-fx-alignment: CENTER");
+		orderStatus.setStyle("-fx-alignment: CENTER");
+		orderUserId.setStyle("-fx-alignment: CENTER");
+		orderTotal.setStyle("-fx-alignment: CENTER");
+		
 		detailTable = new TableView<>();
 		detailOrderId = new TableColumn<>("Order ID");
 		detailItemName = new TableColumn<>("Item Name");
@@ -193,6 +199,13 @@ public class ChefPage extends BorderPane {
 		detailId = new TableColumn<>("Detail ID");
 		detailItemId = new TableColumn<>("Item ID");
 		detailItemPrice = new TableColumn<>("Price/item");
+		
+		detailOrderId.setStyle("-fx-alignment: CENTER");
+		detailItemName.setStyle("-fx-alignment: CENTER");
+		detailQuantity.setStyle("-fx-alignment: CENTER");
+		detailId.setStyle("-fx-alignment: CENTER");
+		detailItemId.setStyle("-fx-alignment: CENTER");
+		detailItemPrice.setStyle("-fx-alignment: CENTER");
 		
 		qtySpinner.getValueFactory().setWrapAround(true);
 		
@@ -317,6 +330,8 @@ public class ChefPage extends BorderPane {
 	
 	//constructor
 	public ChefPage(Stage primaryStage, Main main) {
+		primaryStage.setTitle("Chef Page");
+		
 		menu(main, primaryStage);
 		handleOrder();
 		

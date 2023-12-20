@@ -96,6 +96,13 @@ public class Order {
 		return "Order Served";
 	}	
 	
-	//function to get order from database by order id
-	
+	//function to serve order by id
+	public String paidOrder(String orderId) {
+		String query = String.format("UPDATE `orders` SET `orderStatus` = 'Paid' WHERE `orderId` = '%d'", Integer.parseInt(orderId));
+		if(!db.execute(query)) {
+			return "Update order to paid failed";
+		}
+		
+		return "Order Paid";
+	}	
 }

@@ -43,7 +43,7 @@ public class CashierPage extends BorderPane {
 
 	Menu menu;
 	MenuBar mb;
-	MenuItem m1, m2;
+	MenuItem m1, m2, m3;
 	VBox mainbox, orderContainer, detailContainer;
 	BorderPane bp;
 	GridPane gpOrder, gpForm;
@@ -112,6 +112,7 @@ public class CashierPage extends BorderPane {
 		menu = new Menu("Menu");
 		m1 = new MenuItem("View Ongoing/Served Order");
 		m2 = new MenuItem("Log Out");
+		m3 = new MenuItem("View Receipt");
 		mb = new MenuBar();
 
 		// Container init
@@ -195,7 +196,7 @@ public class CashierPage extends BorderPane {
 		spDetail.setContent(detailTable);
 
 		// menubar setup
-		menu.getItems().addAll(m1, new SeparatorMenuItem(), m2);
+		menu.getItems().addAll(m1, m3, new SeparatorMenuItem(), m2);
 		mb.getMenus().add(menu);
 
 		// container setup
@@ -279,6 +280,14 @@ public class CashierPage extends BorderPane {
 			}
 		});
 
+		m3.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				// TODO Auto-generated method stub
+				primaryStage.setScene(new Scene(new ReceiptPage(primaryStage, main), 1200, 700));
+			}
+		});
 		m2.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override

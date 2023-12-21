@@ -3,14 +3,10 @@ package controller;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 import database.Connect;
-import main.Main;
 import model.Cart;
 import model.Order;
 import model.OrderItem;
@@ -111,6 +107,10 @@ public class OrderController {
 	
 	public void getSession(User u) {
 		user = u;
+	}
+	
+	public ArrayList<Order> getpaidOrders() {
+		return order.getPaidOrder();
 	}
 	
 	public ArrayList<Order> getAllOrders() {

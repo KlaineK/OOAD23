@@ -1,5 +1,9 @@
 package model;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
 import database.Connect;
 
 public class Order {
@@ -104,5 +108,32 @@ public class Order {
 		}
 		
 		return "Order Paid";
-	}	
+	}
+	
+	//function to get order with paid status
+	public ArrayList<Order> getPaidOrder() {
+		ArrayList<Order> orders = new ArrayList<>();
+		
+		//query for select order with paid status
+		String query = String.format("SELECT `orders`.`orderId`, "
+				+ "`orders`.`orderUserId`, `users`.`userName`, "
+				+ "`orders`.`orderStatus`, `orders`.`orderTotal` "
+				+ "FROM `orders` INNER JOIN `users` ON "
+				+ "`orders`.`orderUserId` = `users`.`userId` "
+				+ "WHERE `orders`.`orderStatus` = 'Paid'");
+		ResultSet rs = db.selectData(query);
+		
+		try {
+			while(rs.next()) {
+				orders.add(new Order(Integer.toString(rs.getInt("orderId")), 
+						Integer.toString(rs.getInt("orderUserId")), 
+						rs.getString("userName"), rs.getString("orderStatus"), 
+						rs.getInt("orderTotal")));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return orders;
+	}
 }

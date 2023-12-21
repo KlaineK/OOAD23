@@ -6,6 +6,7 @@ import javafx.stage.Stage;
 import model.User;
 import view.AdminPage;
 import view.ChefPage;
+import view.ReceiptPage;
 import view.Register;
 
 public class Main extends Application {
@@ -19,6 +20,7 @@ public class Main extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		// TODO Auto-generated method stub
 //		primaryStage.setScene(new Scene(new ChefPage(primaryStage, this), 1200, 700));
+//		primaryStage.setScene(new Scene(new ReceiptPage(primaryStage, this), 1200, 700));
 		primaryStage.setScene(new Scene(new Register(primaryStage, this), 1200, 700));
 		primaryStage.show();
 	}

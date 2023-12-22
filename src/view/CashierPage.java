@@ -165,10 +165,10 @@ public class CashierPage extends BorderPane {
 		orderStatus.setStyle("-fx-alignment: CENTER");
 		orderTotal.setStyle("-fx-alignment: CENTER");
 
-		orderId.prefWidthProperty().bind(orderTable.widthProperty().divide(6));
-		orderName.prefWidthProperty().bind(orderTable.widthProperty().divide(6));
-		orderStatus.prefWidthProperty().bind(orderTable.widthProperty().divide(6));
-		orderTotal.prefWidthProperty().bind(orderTable.widthProperty().divide(6));
+		orderId.prefWidthProperty().bind(orderTable.widthProperty().divide(5));
+		orderName.prefWidthProperty().bind(orderTable.widthProperty().divide(5));
+		orderStatus.prefWidthProperty().bind(orderTable.widthProperty().divide(5));
+		orderTotal.prefWidthProperty().bind(orderTable.widthProperty().divide(5));
 
 		spOrder.setContent(orderTable);
 
